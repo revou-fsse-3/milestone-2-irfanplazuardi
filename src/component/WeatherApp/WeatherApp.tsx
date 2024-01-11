@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { clear, cloud, drizzle, humidity, rain, search, snow, wind } from "../assets";
+import { clear, cloud, drizzle, humidity, rain, snow, wind } from "../assets";
 import { useParams } from "react-router-dom";
 import { API } from "./config";
-import Home from "./Home";
 
 const WeatherApp = () => {
   const [wicon, setWicon] = useState(cloud);
@@ -47,15 +46,6 @@ const WeatherApp = () => {
   }, []);
 
   // add toogle to change temperature between C and F use API key
-
-  const changeTemp = () => {
-    const temp = document.getElementsByClassName("weather-temp")[0] as HTMLSpanElement;
-    if (temp.innerHTML === "24&#176;C") {
-      temp.innerHTML = "75&#176;F";
-    } else {
-      temp.innerHTML = "24&#176;C";
-    }
-  };
 
   return (
     <main>

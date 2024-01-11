@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { API } from "./config";
-import { clear, cloud, drizzle, humidity, rain, search, snow, wind } from "../assets";
+import { search } from "../assets";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios, { AxiosError } from "axios";
@@ -64,6 +64,7 @@ const Home = () => {
       try {
         const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${values.city}&units=Metric&appid=${API}`);
         searchCity();
+        console.log(response);
       } catch (error) {
         if (error instanceof AxiosError && error.response) {
           setErrors({ city: error.response.data.message });
