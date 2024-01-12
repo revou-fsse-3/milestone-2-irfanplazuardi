@@ -2,10 +2,17 @@ import { useEffect, useState } from "react";
 import { clear, cloud, drizzle, humidity, rain, snow, wind } from "../assets";
 import { useParams } from "react-router-dom";
 import { API } from "./config";
+import axios from "axios";
 
+const enum Temperature {
+  celcius = "metric",
+  farenheit = "imperial",
+  kelvin = "",
+}
 const WeatherApp = () => {
   const [wicon, setWicon] = useState(cloud);
   const { city } = useParams();
+
   useEffect(() => {
     const callingAPI = async () => {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=Metric&appid=${API}`;
@@ -45,16 +52,43 @@ const WeatherApp = () => {
     callingAPI();
   }, []);
 
-  // add toogle to change temperature between C and F use API key
+  const convertTemperature = async (city = "London", temperature: Temperature = Temperature.celcius) => {
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${temperature}&appid=${API}`;
+
+    let symbol = "C";
+
+    if (temperature === Temperature.farenheit) {
+      symbol = "F";
+    }
+    if (temperature === Temperature.kelvin) {
+      symbol = "K";
+    }
+
+    try {
+      const response = await axios.get(url);
+      const temperature = Math.floor(response.data.main.temp);
+
+      const temperatureElement = document.getElementsByClassName("weather-temp")[0] as HTMLSpanElement;
+      temperatureElement.innerText = `${temperature} °${symbol}`;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <main>
-      {/* <div className="topbar">
-        <input type="text" className="cityinput" placeholder="Search City" />
-        <button className="search-icon" onClick={}>
-          <img src={search} alt="search" />
+      <div className="temperature-converter">
+        <h1 className="title">Select Temperature</h1>
+        <button className="active" onClick={() => convertTemperature(city)}>
+          Celcius
         </button>
-      </div> */}
+        <button className="active" onClick={() => convertTemperature(city, Temperature.farenheit)}>
+          Farenheit
+        </button>
+        <button className="active" onClick={() => convertTemperature(city, Temperature.kelvin)}>
+          Kelvin
+        </button>
+      </div>
 
       <div className="weather-image">
         <img src={wicon} alt="icon" />
