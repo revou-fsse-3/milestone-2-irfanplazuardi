@@ -40,7 +40,6 @@ const Home = () => {
       }
     },
   });
-  console.log(formik.errors.city);
   return (
     <>
       <h1 className="weather-location">Weather APP</h1>
